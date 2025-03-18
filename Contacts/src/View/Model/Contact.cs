@@ -13,7 +13,7 @@ namespace View.Model
     /// <summary>
     /// Контакт.
     /// </summary>
-    internal class Contact
+    public class Contact
     {
         /// <summary>
         /// Хранит полное имя (Фамилия Имя Отчество).

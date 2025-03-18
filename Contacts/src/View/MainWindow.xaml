@@ -20,25 +20,31 @@
         <GroupBox x:Name="ReadContactGroupBox" Header="Read Contact" Margin="5,3,3,3" Grid.Column="1" Grid.ColumnSpan="3">
             <WrapPanel>
                 <Label x:Name="NameLabel" Content="Name:" Width="232" Height="25.96"/>
-                <TextBlock x:Name="NameTextBlock" TextWrapping="Wrap" Text="TextBlock" Width="222" Height="22" Margin="5,0,0,0" FontWeight="Bold"/>
+                <TextBlock x:Name="NameTextBlock" TextWrapping="Wrap" Width="222" Height="22" Margin="5,0,0,0" FontWeight="Bold"
+                    Text="{Binding FullName}"/>
                 <Label x:Name="PhoneNumberLabel" Content="Phone number:" Width="232"/>
-                <TextBlock x:Name="PhoneNumberTextBlock" TextWrapping="Wrap" Text="TextBlock" Height="22" Width="227" Margin="5,0,0,0" FontWeight="Bold"/>
+                <TextBlock x:Name="PhoneNumberTextBlock" TextWrapping="Wrap" Height="22" Width="227" Margin="5,0,0,0" FontWeight="Bold"
+                    Text="{Binding PhoneNumber}"/>
                 <Label x:Name="EmailLabel" Content="Email:" Width="232"/>
-                <TextBlock x:Name="EmailTextBlock" TextWrapping="Wrap" Text="TextBlock" Width="232" Height="22" Margin="5,0,0,0" FontWeight="Bold"/>
+                <TextBlock x:Name="EmailTextBlock" TextWrapping="Wrap" Width="232" Height="22" Margin="5,0,0,0" FontWeight="Bold"
+                     Text="{Binding Email}"/>
             </WrapPanel>
         </GroupBox>
         <GroupBox x:Name="EditContactGroupBox" Header="Edit Contact" Margin="3,3,5,3">
             <WrapPanel>
                 <Label x:Name="NameEditLabel" Content="Name:" Width="231" Height="25.96"/>
-                <TextBox x:Name="NameEditTextBox" TextWrapping="Wrap" Text="TextBox" Width="217" Height="22" Margin="5,0,0,0"/>
+                <TextBox x:Name="NameEditTextBox" TextWrapping="Wrap" Width="217" Height="22" Margin="5,0,0,0"
+                    Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}" />
                 <Label x:Name="PhoneNumberTextBox" Content="Phone number:" Width="231"/>
-                <TextBox x:Name="PhoneNumberTextBox1" TextWrapping="Wrap" Text="TextBox" Width="217" Height="22" Margin="5,0,0,0"/>
+                <TextBox x:Name="PhoneNumberTextBox1" TextWrapping="Wrap" Width="217" Height="22" Margin="5,0,0,0"
+                    Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
                 <Label x:Name="EmailEditLabel" Content="Email:" Width="232"/>
-                <TextBox x:Name="EmailEditTextBox" TextWrapping="Wrap" Text="TextBox" Width="217" Height="22" Margin="5,0,0,0"/>
+                <TextBox x:Name="EmailEditTextBox" TextWrapping="Wrap" Width="217" Height="22" Margin="5,0,0,0"
+                    Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
             </WrapPanel>
         </GroupBox>
-        <Button x:Name="SaveButton" Grid.Column="2" Content="Save" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="84" Height="33" Margin="3,3,3,3" Click="Button_Click"/>
-        <Button x:Name="LoadButton" Grid.Column="3" Content="Load" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="84" Height="33" Margin="3,3,3,3"/>
+        <Button x:Name="SaveButton" Command="{Binding SaveCommand}" Grid.Column="2" Content="Save" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="84" Height="33" Margin="3,3,3,3" Click="Button_Click"/>
+        <Button x:Name="LoadButton" Command="{Binding LoadCommand}" Grid.Column="3" Content="Load" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="84" Height="33" Margin="3,3,3,3"/>
 
     </Grid>
 </Window>
