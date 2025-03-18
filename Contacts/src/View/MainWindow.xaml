@@ -19,12 +19,12 @@
         </Grid.ColumnDefinitions>
         <GroupBox x:Name="ReadContactGroupBox" Header="Read Contact" Margin="5,3,3,3" Grid.Column="1" Grid.ColumnSpan="3">
             <WrapPanel>
-                <Label x:Name="NameLabel" Content="Name:" Width="232" Height="25"/>
-                <Label x:Name="NameReadLabel" Content="Label" Width="232" Height="25"/>
-                <Label x:Name="PhoneNumberLabel" Content="Phone number:" Width="232" Height="25"/>
-                <Label x:Name="PhoneNumberReadLabel" Content="Label" Width="232" Height="25"/>
-                <Label x:Name="EmailLabel" Content="Email:" Width="232" Height="25"/>
-                <Label x:Name="EmailReadLabel" Content="Label" Width="232" Height="25"/>
+                <Label x:Name="NameLabel" Content="Name:" Width="232" Height="25.96"/>
+                <TextBlock x:Name="NameTextBlock" TextWrapping="Wrap" Text="TextBlock" Width="222" Height="22" Margin="5,0,0,0" FontWeight="Bold"/>
+                <Label x:Name="PhoneNumberLabel" Content="Phone number:" Width="232"/>
+                <TextBlock x:Name="PhoneNumberTextBlock" TextWrapping="Wrap" Text="TextBlock" Height="22" Width="227" Margin="5,0,0,0" FontWeight="Bold"/>
+                <Label x:Name="EmailLabel" Content="Email:" Width="232"/>
+                <TextBlock x:Name="EmailTextBlock" TextWrapping="Wrap" Text="TextBlock" Width="232" Height="22" Margin="5,0,0,0" FontWeight="Bold"/>
             </WrapPanel>
         </GroupBox>
         <GroupBox x:Name="EditContactGroupBox" Header="Edit Contact" Margin="3,3,5,3">

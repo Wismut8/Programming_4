@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Xml.Linq;
 
 namespace View.Model
 {
@@ -59,7 +60,7 @@ namespace View.Model
         /// <summary>
         /// Конструктор по умолчанию.
         /// </summary>
-        public Contact() { }
+        public Contact() {}
 
     }
 }
