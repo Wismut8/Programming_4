@@ -103,5 +103,14 @@ namespace View.Model
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        public Contact Clone()
+        {
+            return new Contact
+            {
+                FullName = this.FullName,
+                PhoneNumber = this.PhoneNumber,
+                Email = this.Email
+            };
+        }
     }
 }

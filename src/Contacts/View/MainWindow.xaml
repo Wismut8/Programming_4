@@ -4,8 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View"
+        xmlns:vm="clr-namespace:View.ViewModel"
         mc:Ignorable="d"
         Title="Contacts" Height="432" Width="600">
+
+
+    <Window.DataContext>
+        <vm:MainVM/>
+    </Window.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -21,8 +27,8 @@
         <Border Grid.Column="0" Background="#F8F8F8">
             <ListBox 
                 Margin="8"
-                ItemsSource="{Binding Contacts, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding Contact, Mode=TwoWay}">
+                ItemsSource="{Binding Contacts}"
+                SelectedItem="{Binding SelectedContact, Mode=TwoWay}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding FullName}"/>
@@ -30,38 +36,45 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </Border>
-        <Border Grid.Column="0" Grid.Row="1" Background="#F8F8F8"/>
 
+        <!-- Разделитель -->
         <GridSplitter 
             Grid.Column="1" 
             Background="White"
             HorizontalAlignment="Center"
             Width="3"/>
 
-        <Grid Grid.Row="1">
+        <!-- Нижняя панель с кнопками -->
+        <Grid Grid.Column="0" Grid.Row="1" Background="#F8F8F8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button 
-                Content="Add" 
-                Height="25" 
-                Margin="8,3,3,8"
-                Grid.Column="0" />
-            <Button 
-                Content="Edit" 
-                Height="25" 
-                Margin="3,3,3,8"
-                Grid.Column="1" />
-            <Button          
-                Content="Remove" 
-                Height="25" 
-                Margin="3,3,8,8"
-                Grid.Column="2" />
 
+            <Button Content="Add" 
+                    Command="{Binding AddCommand}"
+                    Height="25" 
+                    Margin="8,3,3,8"
+                    Grid.Column="0"/>
+
+            <Button Content="Edit" 
+                    Command="{Binding EditCommand}"
+                    Height="25" 
+                    Margin="3,3,3,8"
+                    Grid.Column="1"
+                    IsEnabled="{Binding CanEditDelete}"/>
+
+            <Button Content="Remove" 
+                    Command="{Binding RemoveCommand}"
+                    Height="25" 
+                    Margin="3,3,8,8"
+                    Grid.Column="2"
+                    IsEnabled="{Binding CanEditDelete}"/>
         </Grid>
-        <Grid Grid.Column="2">
+
+        <!-- Правая панель: Детали контакта -->
+        <Grid Grid.Column="2" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
@@ -71,7 +84,6 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-
             <Image 
                 HorizontalAlignment="Left" 
                 Height="100" 
@@ -80,30 +92,33 @@
                 VerticalAlignment="Top"  
                 Source="/contact photo.png"/>
 
-            <StackPanel Grid.Column="1" Margin="8,8,8,8" >
+            <StackPanel Grid.Column="1" Margin="8">
                 <Label Content="Name:"/>
-                <TextBox 
-                    Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"
-                    Margin="5,0,0,0"/>
+                <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         IsReadOnly="{Binding IsReadOnly}"
+                         Margin="5,0,0,0"/>
+
                 <Label Content="Phone Number:"/>
-                <TextBox 
-                    Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" 
-                    Margin="5,0,0,0"/>
+                <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         IsReadOnly="{Binding IsReadOnly}"
+                         Margin="5,0,0,0"/>
+
                 <Label Content="Email:"/>
-                <TextBox 
-                    Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
-                    Margin="5,0,0,0"/>
+                <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         IsReadOnly="{Binding IsReadOnly}"
+                         Margin="5,0,0,0"/>
             </StackPanel>
 
-            <Button 
-                Grid.Column="1" 
-                Grid.Row="1"
-                Height="25" 
-                Width="75" 
-                Content="Apply" 
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Top"
-                Margin="8,50,0,0" />
+            <Button Grid.Column="1" 
+                    Grid.Row="1"
+                    Content="Apply" 
+                    Command="{Binding ApplyCommand}"
+                    Visibility="{Binding IsApplyVisible}"
+                    Height="25" 
+                    Width="75" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Top"
+                    Margin="8,50,0,0"/>
         </Grid>
     </Grid>
 </Window>

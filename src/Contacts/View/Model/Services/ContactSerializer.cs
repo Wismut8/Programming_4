@@ -1,62 +1,58 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace View.Model.Services
 {
     /// <summary>
-    /// Сохраняет и загружает данные.
+    /// Сохраняет и загружает данные контактов
     /// </summary>
     public class ContactSerializer
     {
-        /// <summary>
-        /// Хранит путь по умолчанию.
-        /// </summary>
-        private string _filePath = Path.Combine(
+        private readonly string _filePath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "Contacts",
             "contacts.json"
         );
 
         /// <summary>
-        /// Сохранение контакта в файл.
+        /// Сохраняет коллекцию контактов в файл
         /// </summary>
-        /// <param name="contact">Объект контакта. <see cref="Contact"/></param>
-        /// <exception cref="Exception"></exception>
-        public void SaveContact(Contact contact)
+        public void SaveContacts(ObservableCollection<Contact> contacts)
         {
             try
             {
-                string json = JsonConvert.SerializeObject(contact, Formatting.Indented);
                 Directory.CreateDirectory(Path.GetDirectoryName(_filePath));
+                string json = JsonConvert.SerializeObject(contacts, Formatting.Indented);
                 File.WriteAllText(_filePath, json);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception($"Ошибка сохранения: {ex.Message}");
             }
         }
 
         /// <summary>
-        /// Загрузка контакта из файла.
+        /// Загружает коллекцию контактов из файла
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public Contact LoadContact()
+        public ObservableCollection<Contact> LoadContacts()
         {
             try
             {
                 if (!File.Exists(_filePath))
                 {
-                    return new Contact();
+                    return new ObservableCollection<Contact>();
                 }
+
                 string json = File.ReadAllText(_filePath);
-                Contact contact = JsonConvert.DeserializeObject<Contact>(json);
-                return contact;
+                return JsonConvert.DeserializeObject<ObservableCollection<Contact>>(json)
+                    ?? new ObservableCollection<Contact>();
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception($"Ошибка загрузки: {ex.Message}");
             }
         }
     }

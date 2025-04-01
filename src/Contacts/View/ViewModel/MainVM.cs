@@ -1,125 +1,222 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
-using System.Xml.Linq;
 using View.Model;
 using View.Model.Services;
 
 namespace View.ViewModel
 {
-    /// <summary>
-    /// ViewModel для главного окна приложения.
-    /// Реализует интерфейс <see cref="INotifyPropertyChanged"/> для уведомления об изменениях свойств.
-    /// </summary>
     public class MainVM : INotifyPropertyChanged
     {
-        /// <summary>
-        /// Сериализатор контактов, используемый для сохранения и загрузки данных.
-        /// </summary>
-        private readonly ContactSerializer _contactSerializer;
+        private readonly ContactSerializer _serializer;
+        private Contact _selectedContact;
+        private bool _isEditing;
+        private Contact _editingContact;
 
-        /// <summary>
-        /// Выбранный контакт, с которым работает ViewModel.
-        /// </summary>
-        private Contact _contact;
+        public ObservableCollection<Contact> Contacts { get; } = new ObservableCollection<Contact>();
+        public ICommand AddCommand { get; }
+        public ICommand EditCommand { get; }
+        public ICommand RemoveCommand { get; }
+        public ICommand ApplyCommand { get; }
 
-        /// <summary>
-        /// Список контактов.
-        /// </summary>
-        public ObservableCollection<Contact> Contacts { get; } = new ObservableCollection<Contact>
-        {
-            new Contact("LLL", "333", "sadad"),
-            new Contact("GGG", "666", "salad")
-        };
-
-        /// <summary>
-        /// Инициализирует новый экземпляр класса <see cref="MainVM"/>.
-        /// </summary>
         public MainVM()
         {
-            _contact = new Contact();
-            _contactSerializer = new ContactSerializer();
+            _serializer = new ContactSerializer();
+            LoadContacts();
+
+            AddCommand = new AddCommand(this);
+            EditCommand = new EditCommand(this);
+            RemoveCommand = new RemoveCommand(this);
+            ApplyCommand = new ApplyCommand(this);
         }
 
-        /// <summary>
-        /// Задает и возвращает выбранный контакт.
-        /// </summary>
-        public Contact Contact
-        {
-            get => _contact;
-            set
-            {
-                if (_contact != value)
-                {
-                    _contact = value;
-                }
-                OnPropertyChanged(nameof(Contact));
-                OnPropertyChanged(nameof(FullName));
-                OnPropertyChanged(nameof(PhoneNumber));
-                OnPropertyChanged(nameof(Email));
-            }
-        }
-
-        /// <summary>
-        /// Полное имя контакта.
-        /// </summary>
         public string FullName
         {
-            get => _contact.FullName;
+            get => IsEditing ? EditingContact?.FullName : SelectedContact?.FullName;
             set
             {
-                if (_contact.FullName != value)
+                if (IsEditing)
                 {
-                    _contact.FullName = value;
+                    if (EditingContact != null && EditingContact.FullName != value)
+                    {
+                        EditingContact.FullName = value;
+                        OnPropertyChanged(nameof(FullName));
+                        CommandManager.InvalidateRequerySuggested();
+                    }
+                }
+                else if (SelectedContact != null && SelectedContact.FullName != value)
+                {
+                    SelectedContact.FullName = value;
                     OnPropertyChanged(nameof(FullName));
                 }
             }
         }
 
         /// <summary>
-        /// Номер телефона контакта.
+        /// Задает и возвращает номер контакта.
         /// </summary>
         public string PhoneNumber
         {
-            get => _contact.PhoneNumber;
+            get => IsEditing ? EditingContact?.PhoneNumber : SelectedContact?.PhoneNumber;
             set
             {
-                if (_contact.PhoneNumber != value)
+                if (IsEditing)
                 {
-                    _contact.PhoneNumber = value;
+                    if (EditingContact != null && EditingContact.PhoneNumber != value)
+                    {
+                        EditingContact.PhoneNumber = value;
+                        OnPropertyChanged(nameof(PhoneNumber));
+                        CommandManager.InvalidateRequerySuggested();
+                    }
+                }
+                else if (SelectedContact != null && SelectedContact.PhoneNumber != value)
+                {
+                    SelectedContact.PhoneNumber = value;
                     OnPropertyChanged(nameof(PhoneNumber));
                 }
             }
         }
 
         /// <summary>
-        /// Электронная почта контакта.
+        /// Задает и возвращает почту контакта.
         /// </summary>
         public string Email
         {
-            get => _contact.Email;
+            get => IsEditing ? EditingContact?.Email : SelectedContact?.Email;
             set
             {
-                if (_contact.Email != value)
+                if (IsEditing)
                 {
-                    _contact.Email = value;
+                    if (EditingContact != null && EditingContact.Email != value)
+                    {
+                        EditingContact.Email = value;
+                        OnPropertyChanged(nameof(Email));
+                        CommandManager.InvalidateRequerySuggested();
+                    }
+                }
+                else if (SelectedContact != null && SelectedContact.Email != value)
+                {
+                    SelectedContact.Email = value;
                     OnPropertyChanged(nameof(Email));
                 }
             }
         }
 
-        /// <summary>
-        /// Событие, которое возникает при изменении значения свойства.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Вызывает событие <see cref="PropertyChanged"/> для уведомления об изменении свойства.
-        /// </summary>
-        /// <param name="propertyName">Имя изменившегося свойства.</param>
-        protected void OnPropertyChanged(string propertyName)
+        public Contact SelectedContact
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get => _selectedContact;
+            set
+            {
+                if (_selectedContact == value) return;
+
+                if (IsEditing && value != null)
+                {
+                    IsEditing = false;
+                }
+
+                _selectedContact = value;
+                OnPropertyChanged(nameof(SelectedContact));
+                OnPropertyChanged(nameof(FullName));
+                OnPropertyChanged(nameof(PhoneNumber));
+                OnPropertyChanged(nameof(Email));
+                OnPropertyChanged(nameof(IsReadOnly));
+                OnPropertyChanged(nameof(CanEditDelete));
+            }
         }
+        public Contact EditingContact
+        {
+            get => _editingContact;
+            set
+            {
+                _editingContact = value;
+                OnPropertyChanged(nameof(EditingContact));
+                OnPropertyChanged(nameof(FullName));
+                OnPropertyChanged(nameof(PhoneNumber));
+                OnPropertyChanged(nameof(Email));
+            }
+        }
+
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set
+            {
+                _isEditing = value;
+                OnPropertyChanged(nameof(IsEditing));
+                OnPropertyChanged(nameof(IsReadOnly));
+                OnPropertyChanged(nameof(IsApplyVisible));
+                OnPropertyChanged(nameof(CanEditDelete));
+            }
+        }
+
+        public bool IsReadOnly => !_isEditing;
+        public Visibility IsApplyVisible => _isEditing ? Visibility.Visible : Visibility.Collapsed;
+        public bool CanEditDelete => SelectedContact != null && !_isEditing;
+
+        public void ApplyChanges()
+        {
+            if (EditingContact != null)
+            {
+                if (SelectedContact != null)
+                {
+                    SelectedContact.FullName = EditingContact.FullName;
+                    SelectedContact.PhoneNumber = EditingContact.PhoneNumber;
+                    SelectedContact.Email = EditingContact.Email;
+                }
+                else
+                {
+                    var newContact = new Contact(
+                        EditingContact.FullName,
+                        EditingContact.PhoneNumber,
+                        EditingContact.Email);
+                    Contacts.Add(newContact);
+                    SelectedContact = newContact;
+                }
+            }
+
+            EditingContact = null;
+            IsEditing = false;
+            SaveContacts();
+        }
+
+        public void RemoveContact()
+        {
+            int index = Contacts.IndexOf(SelectedContact);
+            Contacts.Remove(SelectedContact);
+
+            if (Contacts.Count > 0)
+            {
+                if (index >= Contacts.Count)
+                {
+                    index = Contacts.Count - 1;
+                }
+                SelectedContact = Contacts[index];
+            }
+
+            SaveContacts();
+        }
+
+        private void LoadContacts()
+        {
+            foreach (var contact in _serializer.LoadContacts())
+                Contacts.Add(contact);
+        }
+
+        private void SaveContacts()
+        {
+            _serializer.SaveContacts(Contacts);
+        }
+
+        public void RefreshUI()
+        {
+            OnPropertyChanged(nameof(IsReadOnly));
+            OnPropertyChanged(nameof(IsApplyVisible));
+            OnPropertyChanged(nameof(CanEditDelete));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
