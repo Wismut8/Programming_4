@@ -1,11 +1,13 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics.Contracts;
 
 namespace View.Model
 {
     /// <summary>
     /// Контакт.
     /// </summary>
-    public class Contact
+    public class Contact : INotifyPropertyChanged
     {
         /// <summary>
         /// Хранит полное имя (Фамилия Имя Отчество).
@@ -25,17 +27,50 @@ namespace View.Model
         /// <summary>
         /// Возвращает и задает полное имя покупателя.
         /// </summary>
-        public string FullName { get; set; }
+        public string FullName
+        {
+            get => _fullName;
+            set
+            {
+                if (_fullName != value)
+                {
+                    _fullName = value;
+                    OnPropertyChanged(nameof(FullName));
+                }
+            }
+        }
 
         /// <summary>
         /// Возвращает и задает номер телефона.
         /// </summary>
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber
+        {
+            get => _phoneNumber;
+            set
+            {
+                if (_phoneNumber != value)
+                {
+                    _phoneNumber = value;
+                    OnPropertyChanged(nameof(PhoneNumber));
+                }
+            }
+        }
 
         /// <summary>
         /// Возвращает и задает электронную почту.
         /// </summary>
-        public string Email { get; set; }
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                if (_email != value)
+                {
+                    _email = value;
+                    OnPropertyChanged(nameof(Email));
+                }
+            }
+        }
 
         /// <summary>
         /// Создает экземпляр <see cref="Contact"/>
@@ -55,5 +90,18 @@ namespace View.Model
         /// </summary>
         public Contact() {}
 
+        /// <summary>
+        /// Событие, которое возникает при изменении значения свойства.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Вызывает событие <see cref="PropertyChanged"/> для уведомления об изменении свойства.
+        /// </summary>
+        /// <param name="propertyName">Имя изменившегося свойства.</param>
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

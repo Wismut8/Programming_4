@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
+using System.Xml.Linq;
 using View.Model;
 using View.Model.Services;
 
@@ -17,17 +19,18 @@ namespace View.ViewModel
         private readonly ContactSerializer _contactSerializer;
 
         /// <summary>
-        /// Текущий контакт, с которым работает ViewModel.
+        /// Выбранный контакт, с которым работает ViewModel.
         /// </summary>
         private Contact _contact;
+
         /// <summary>
-        /// Команда для сохранения контакта в файл.
+        /// Список контактов.
         /// </summary>
-        public ICommand SaveCommand { get; }
-        /// <summary>
-        /// Команда для загрузки контакта из файла.
-        /// </summary>
-        public ICommand LoadCommand { get; }
+        public ObservableCollection<Contact> Contacts { get; } = new ObservableCollection<Contact>
+        {
+            new Contact("LLL", "333", "sadad"),
+            new Contact("GGG", "666", "salad")
+        };
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="MainVM"/>.
@@ -36,8 +39,25 @@ namespace View.ViewModel
         {
             _contact = new Contact();
             _contactSerializer = new ContactSerializer();
-            SaveCommand = new SaveCommand(_contactSerializer, _contact);
-            LoadCommand = new LoadCommand(_contactSerializer, this);
+        }
+
+        /// <summary>
+        /// Задает и возвращает выбранный контакт.
+        /// </summary>
+        public Contact Contact
+        {
+            get => _contact;
+            set
+            {
+                if (_contact != value)
+                {
+                    _contact = value;
+                }
+                OnPropertyChanged(nameof(Contact));
+                OnPropertyChanged(nameof(FullName));
+                OnPropertyChanged(nameof(PhoneNumber));
+                OnPropertyChanged(nameof(Email));
+            }
         }
 
         /// <summary>
