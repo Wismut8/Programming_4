@@ -5,91 +5,90 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View"
         mc:Ignorable="d"
-        Title="Contacts" Height="432" Width="525">
+        Title="Contacts" Height="432" Width="600">
 
-    <Grid Margin="15">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <GroupBox Header="Edit Contact" Margin="3">
-            <StackPanel>
-                <Label Content="Name:"/>
-                <TextBox 
-                    TextWrapping="Wrap" 
-                    Height="22" 
-                    Margin="3"
-                    Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"/>
-                <Label Content="Phone number:"/>
-                <TextBox 
-                    TextWrapping="Wrap" 
-                    Height="22"
-                    Margin="3"
-                    Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"/>
-                <Label Content="Email:"/>
-                <TextBox 
-                    TextWrapping="Wrap" 
-                    Height="22"
-                    Margin="3"
-                    Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-        </GroupBox>
+        <Border Grid.Column="0" Background="#F8F8F8">
+            <ListBox Margin="8"/>
+        </Border>
+        <Border Grid.Column="0" Grid.Row="1" Background="#F8F8F8"/>
 
-        <GroupBox 
-            Header="Read Contact" 
-            Margin="3" 
-            Grid.Column="1">
-            <StackPanel>
-                <Label Content="Name:"/>
-                <TextBlock 
-                    Height="22" 
-                    Margin="3" 
-                    FontWeight="Bold"
-                    Text="{Binding FullName}"/>
-                <Label Content="Phone number:"/>
-                <TextBlock 
-                    Height="22" 
-                    Margin="3"
-                    FontWeight="Bold"
-                    Text="{Binding PhoneNumber}"/>
-                <Label Content="Email:"/>
-                <TextBlock 
-                    Height="22" 
-                    Margin="3" 
-                    FontWeight="Bold"
-                    Text="{Binding Email}"/>
-            </StackPanel>
-        </GroupBox>
-
-        <WrapPanel 
+        <GridSplitter 
             Grid.Column="1" 
-            Grid.Row="1" 
-            FlowDirection="RightToLeft">
+            Background="White"
+            HorizontalAlignment="Center"
+            Width="3"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button 
+                Content="Add" 
+                Height="25" 
+                Margin="8,3,3,8"
+                Grid.Column="0" />
+            <Button 
+                Content="Edit" 
+                Height="25" 
+                Margin="3,3,3,8"
+                Grid.Column="1" />
+            <Button          
+                Content="Remove" 
+                Height="25" 
+                Margin="3,3,8,8"
+                Grid.Column="2" />
+
+        </Grid>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+
+            <Image 
+                HorizontalAlignment="Left" 
+                Height="100" 
+                Width="100" 
+                Margin="8,35,8,0" 
+                VerticalAlignment="Top"  
+                Source="/contact photo.png"/>
+
+            <StackPanel Grid.Column="1" Margin="8,8,8,8" >
+                <Label Content="Name:"/>
+                <TextBox Text="TextBox" Margin="5,0,0,0"/>
+                <Label Content="Phone Number:"/>
+                <TextBox Text="TextBox" Margin="5,0,0,0"/>
+                <Label Content="Email:"/>
+                <TextBox Text="TextBox" Margin="5,0,0,0"/>
+            </StackPanel>
 
             <Button 
-            Command="{Binding SaveCommand}" 
-            Grid.Column="1" 
-            Grid.Row="1"
-            Content="Save" 
-            HorizontalAlignment="Right"  
-            VerticalAlignment="Center" 
-            Margin="3"
-            Width="75" 
-            Height="25"/>
-            
-            <Button 
-            Command="{Binding LoadCommand}" 
-            Content="Load" 
-            HorizontalAlignment="Right" 
-            VerticalAlignment="Center"
-            Width="75" 
-            Height="25" />
-        </WrapPanel>
-
+                Grid.Column="1" 
+                Grid.Row="1"
+                Height="25" 
+                Width="75" 
+                Content="Apply" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top"
+                Margin="8,50,0,0" />
+        </Grid>
     </Grid>
 </Window>

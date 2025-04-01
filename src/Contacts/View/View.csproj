@@ -9,11 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="contact photo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="communication_contact_address_book_contacts_icon_191613.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="contact photo.png" />
   </ItemGroup>
 
 </Project>
