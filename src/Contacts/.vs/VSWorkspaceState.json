@@ -1,11 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\src",
-    "\\src\\View",
-    "\\src\\View\\Model",
-    "\\src\\View\\Model\\Services"
+    ""
   ],
-  "SelectedNode": "\\src\\View\\Model\\Services\\ContactSerializer.cs",
   "PreviewInSolutionExplorer": false
 }

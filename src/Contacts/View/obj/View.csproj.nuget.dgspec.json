@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Liza\\Source\\Repos\\Programming_4\\src\\Contacts\\View\\View.csproj": {}
+    "C:\\Users\\Liza\\source\\repos\\Programming_4\\src\\Contacts\\View\\View.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Liza\\Source\\Repos\\Programming_4\\src\\Contacts\\View\\View.csproj": {
+    "C:\\Users\\Liza\\source\\repos\\Programming_4\\src\\Contacts\\View\\View.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Liza\\Source\\Repos\\Programming_4\\src\\Contacts\\View\\View.csproj",
+        "projectUniqueName": "C:\\Users\\Liza\\source\\repos\\Programming_4\\src\\Contacts\\View\\View.csproj",
         "projectName": "View",
-        "projectPath": "C:\\Users\\Liza\\Source\\Repos\\Programming_4\\src\\Contacts\\View\\View.csproj",
+        "projectPath": "C:\\Users\\Liza\\source\\repos\\Programming_4\\src\\Contacts\\View\\View.csproj",
         "packagesPath": "C:\\Users\\Liza\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Liza\\Source\\Repos\\Programming_4\\src\\Contacts\\View\\obj\\",
+        "outputPath": "C:\\Users\\Liza\\source\\repos\\Programming_4\\src\\Contacts\\View\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Liza\\AppData\\Roaming\\NuGet\\NuGet.Config",
