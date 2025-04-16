@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:View"
+        xmlns:e="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:vm="clr-namespace:View.ViewModel"
         mc:Ignorable="d"
         Title="Contacts" Height="432" Width="600">
@@ -12,6 +12,16 @@
     <Window.DataContext>
         <vm:MainVM/>
     </Window.DataContext>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+    
+    <e:Interaction.Triggers>
+        <e:EventTrigger EventName="Closing">
+            <e:InvokeCommandAction Command="{Binding SaveInFileCommand}"/>
+        </e:EventTrigger>
+    </e:Interaction.Triggers>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -25,26 +35,43 @@
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0" Background="#F8F8F8">
-            <ListBox 
-                Margin="8"
-                ItemsSource="{Binding Contacts}"
-                SelectedItem="{Binding SelectedContact, Mode=TwoWay}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding FullName}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <Grid Margin="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label  
+                    Grid.Row="0"
+                    Content="Find:" 
+                    HorizontalAlignment="Left" 
+                    Width="40"/>
+
+                <TextBox 
+                    Grid.Row="0"
+                    VerticalAlignment="Center"
+                    Margin="40,0,0,0"/>
+
+                <ListBox
+                    Grid.Row="1"
+                    Height="Auto"
+                    ItemsSource="{Binding Contacts}"
+                    SelectedItem="{Binding SelectedContact, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding FullName}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
         </Border>
 
-        <!-- Разделитель -->
         <GridSplitter 
             Grid.Column="1" 
             Background="White"
             HorizontalAlignment="Center"
             Width="3"/>
 
-        <!-- Нижняя панель с кнопками -->
         <Grid Grid.Column="0" Grid.Row="1" Background="#F8F8F8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -73,7 +100,6 @@
                     IsEnabled="{Binding CanEditDelete}"/>
         </Grid>
 
-        <!-- Правая панель: Детали контакта -->
         <Grid Grid.Column="2" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -113,12 +139,12 @@
                     Grid.Row="1"
                     Content="Apply" 
                     Command="{Binding ApplyCommand}"
-                    Visibility="{Binding IsApplyVisible}"
                     Height="25" 
                     Width="75" 
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Top"
-                    Margin="8,50,0,0"/>
+                    Margin="8,50,0,0"
+                    Visibility="{Binding IsApplyVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
         </Grid>
     </Grid>
 </Window>

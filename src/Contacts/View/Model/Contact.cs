@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics.Contracts;
+﻿using System.ComponentModel;
 
 namespace View.Model
 {
@@ -103,6 +101,11 @@ namespace View.Model
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        /// <summary>
+        /// Создает копию объекта типа <see cref="Contact"/>
+        /// </summary>
+        /// <returns>Копия объекта <see cref="Contact"/></returns>
         public Contact Clone()
         {
             return new Contact

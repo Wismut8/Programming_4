@@ -4,7 +4,9 @@
     "\\Contacts",
     "\\Contacts\\View",
     "\\Contacts\\View\\Model",
-    "\\Contacts\\View\\Model\\Services"
+    "\\Contacts\\View\\Model\\Services",
+    "\\Contacts\\View\\ViewModel"
   ],
+  "SelectedNode": "\\Contacts\\View\\ViewModel\\MainVM.cs",
   "PreviewInSolutionExplorer": false
 }

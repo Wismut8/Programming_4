@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "avKoQDd9gv9hnW9zuy/zk4ZJ0JZAiWoi5EjhkxEGZRIqRmaZaaAs9Jn6UrkkwtQApFBjg5m25pYkVMP3Mo8p3A==",
+  "dgSpecHash": "lF74WgHWp+7jNAOD024mINwrovWKyt6s6KiM3URPVDe68TCP0diczHwu6vsr1e0PFjMynMdEWnR0Va6ARuG04A==",
   "success": true,
   "projectFilePath": "C:\\Users\\Liza\\source\\repos\\Programming_4\\src\\Contacts\\View\\View.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Liza\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.135\\microsoft.xaml.behaviors.wpf.1.1.135.nupkg.sha512",
     "C:\\Users\\Liza\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
   ],
   "logs": []

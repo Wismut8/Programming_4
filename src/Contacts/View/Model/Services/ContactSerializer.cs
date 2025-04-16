@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 
@@ -11,6 +10,9 @@ namespace View.Model.Services
     /// </summary>
     public class ContactSerializer
     {
+        /// <summary>
+        /// Хранит путь к файлу.
+        /// </summary>
         private readonly string _filePath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "Contacts",

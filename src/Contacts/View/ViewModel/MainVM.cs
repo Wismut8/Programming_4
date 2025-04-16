@@ -7,30 +7,105 @@ using View.Model.Services;
 
 namespace View.ViewModel
 {
+    /// <summary>
+    /// Основная ViewModel приложения, реализующая логику работы с контактами.
+    /// </summary>
     public class MainVM : INotifyPropertyChanged
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private readonly ContactSerializer _serializer;
+
+        /// <summary>
+        /// Выбранный контакт.
+        /// </summary>
         private Contact _selectedContact;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private bool _isEditing;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private Contact _editingContact;
 
+        /// <summary>
+        /// Коллекция контактов для отображения.
+        /// </summary>
         public ObservableCollection<Contact> Contacts { get; } = new ObservableCollection<Contact>();
+
+        /// <summary>
+        /// Команда добавления нового контакта.
+        /// </summary>
         public ICommand AddCommand { get; }
+
+        /// <summary>
+        /// Команда редактирования выбранного контакта.
+        /// </summary>
         public ICommand EditCommand { get; }
+
+        /// <summary>
+        /// Команда удаления выбранного контакта.
+        /// </summary>
         public ICommand RemoveCommand { get; }
+
+        /// <summary>
+        /// Команда применения изменений контакта.
+        /// </summary>
         public ICommand ApplyCommand { get; }
 
+        /// <summary>
+        /// Команда применения изменений контакта.
+        /// </summary>
+        public ICommand SaveInFileCommand { get; }
+
+        /// <summary>
+        /// Конструктор основной ViewModel.
+        /// </summary>
         public MainVM()
         {
             _serializer = new ContactSerializer();
             LoadContacts();
 
-            AddCommand = new AddCommand(this);
-            EditCommand = new EditCommand(this);
-            RemoveCommand = new RemoveCommand(this);
-            ApplyCommand = new ApplyCommand(this);
+            AddCommand = new RelayCommand(
+                execute: AddContact,
+                canExecute: _ => !IsEditing
+            );
+
+            EditCommand = new RelayCommand(
+                execute: EditContact,
+                canExecute: _ => SelectedContact != null && !IsEditing,
+                useCommandManager: true
+            );
+
+            RemoveCommand = new RelayCommand(
+                execute: RemoveContact,
+                canExecute: _ => SelectedContact != null && !IsEditing,
+                useCommandManager: true
+            );
+
+            ApplyCommand = new RelayCommand(
+                execute: ApplyChanges,
+                canExecute: _ => IsEditing &&
+                    EditingContact != null &&
+                    !string.IsNullOrWhiteSpace(EditingContact.FullName) &&
+                    !string.IsNullOrWhiteSpace(EditingContact.PhoneNumber) &&
+                    !string.IsNullOrWhiteSpace(EditingContact.Email),
+                useCommandManager: true
+            );
+
+            SaveInFileCommand = new RelayCommand(
+                execute: SaveInFile,
+                canExecute: _ => true
+            );
         }
 
+        /// <summary>
+        /// Задает и возвращает полное имя контакта.
+        /// </summary>
         public string FullName
         {
             get => IsEditing ? EditingContact?.FullName : SelectedContact?.FullName;
@@ -54,7 +129,7 @@ namespace View.ViewModel
         }
 
         /// <summary>
-        /// Задает и возвращает номер контакта.
+        /// Задает и возвращает номер телефона контакта.
         /// </summary>
         public string PhoneNumber
         {
@@ -79,7 +154,7 @@ namespace View.ViewModel
         }
 
         /// <summary>
-        /// Задает и возвращает почту контакта.
+        /// Задает и возвращает электронную почту контакта.
         /// </summary>
         public string Email
         {
@@ -103,6 +178,9 @@ namespace View.ViewModel
             }
         }
 
+        /// <summary>
+        /// Выбранный в данный момент контакт.
+        /// </summary>
         public Contact SelectedContact
         {
             get => _selectedContact;
@@ -124,6 +202,10 @@ namespace View.ViewModel
                 OnPropertyChanged(nameof(CanEditDelete));
             }
         }
+
+        /// <summary>
+        /// Контакт, находящийся в режиме редактирования.
+        /// </summary>
         public Contact EditingContact
         {
             get => _editingContact;
@@ -137,6 +219,9 @@ namespace View.ViewModel
             }
         }
 
+        /// <summary>
+        /// Флаг, указывающий на активный режим редактирования.
+        /// </summary>
         public bool IsEditing
         {
             get => _isEditing;
@@ -150,11 +235,61 @@ namespace View.ViewModel
             }
         }
 
+        /// <summary>
+        /// Флаг, указывающий на режим только для чтения.
+        /// </summary>
         public bool IsReadOnly => !_isEditing;
-        public Visibility IsApplyVisible => _isEditing ? Visibility.Visible : Visibility.Collapsed;
+
+        /// <summary>
+        /// Видимость кнопки применения изменений.
+        /// </summary>
+        public bool IsApplyVisible => _isEditing;
+
+        /// <summary>
+        /// Флаг, указывающий на возможность редактирования/удаления.
+        /// </summary>
         public bool CanEditDelete => SelectedContact != null && !_isEditing;
 
-        public void ApplyChanges()
+        /// <summary>
+        /// Загружает контакты из хранилища.
+        /// </summary>
+        private void LoadContacts()
+        {
+            foreach (var contact in _serializer.LoadContacts())
+                Contacts.Add(contact);
+        }
+
+        /// <summary>
+        /// Обновляет состояние пользовательского интерфейса.
+        /// </summary>
+        public void RefreshUI()
+        {
+            OnPropertyChanged(nameof(IsReadOnly));
+            OnPropertyChanged(nameof(IsApplyVisible));
+            OnPropertyChanged(nameof(CanEditDelete));
+        }
+
+        /// <summary>
+        /// Событие, возникающее при изменении значения свойства.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Вызывает событие PropertyChanged при изменении свойства.
+        /// </summary>
+        /// <param name="propertyName">Имя изменившегося свойства</param>
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private void AddContact(object parameter)
+        {
+            IsEditing = true;
+            EditingContact = new Contact();
+            SelectedContact = null;
+            RefreshUI();
+        }
+
+        private void ApplyChanges(object parameter) 
         {
             if (EditingContact != null)
             {
@@ -177,10 +312,16 @@ namespace View.ViewModel
 
             EditingContact = null;
             IsEditing = false;
-            SaveContacts();
         }
 
-        public void RemoveContact()
+        private void EditContact(object parameter)
+        {
+            EditingContact = SelectedContact.Clone();
+            IsEditing = true;
+            RefreshUI();
+        }
+
+        private void RemoveContact(object parameter)
         {
             int index = Contacts.IndexOf(SelectedContact);
             Contacts.Remove(SelectedContact);
@@ -193,30 +334,11 @@ namespace View.ViewModel
                 }
                 SelectedContact = Contacts[index];
             }
-
-            SaveContacts();
         }
 
-        private void LoadContacts()
-        {
-            foreach (var contact in _serializer.LoadContacts())
-                Contacts.Add(contact);
-        }
-
-        private void SaveContacts()
+        private void SaveInFile(object parameter)
         {
             _serializer.SaveContacts(Contacts);
         }
-
-        public void RefreshUI()
-        {
-            OnPropertyChanged(nameof(IsReadOnly));
-            OnPropertyChanged(nameof(IsApplyVisible));
-            OnPropertyChanged(nameof(CanEditDelete));
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
