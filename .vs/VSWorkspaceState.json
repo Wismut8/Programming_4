@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\Contacts",
+    "\\src\\Contacts\\View",
+    "\\src\\Contacts\\View\\ViewModel"
   ],
-  "SelectedNode": "\\Contacts.sln",
+  "SelectedNode": "\\src\\Contacts\\View\\MainWindow.xaml",
   "PreviewInSolutionExplorer": false
 }

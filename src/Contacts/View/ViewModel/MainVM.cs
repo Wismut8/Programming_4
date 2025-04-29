@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows;
 using System.Windows.Input;
 using View.Model;
 using View.Model.Services;
@@ -13,7 +12,7 @@ namespace View.ViewModel
     public class MainVM : INotifyPropertyChanged
     {
         /// <summary>
-        /// 
+        /// Инициализирует сериализатор.
         /// </summary>
         private readonly ContactSerializer _serializer;
 
@@ -23,12 +22,12 @@ namespace View.ViewModel
         private Contact _selectedContact;
 
         /// <summary>
-        /// 
+        /// Хранит состояние редактирования.
         /// </summary>
         private bool _isEditing;
 
         /// <summary>
-        /// 
+        /// Редактируемый контакт.
         /// </summary>
         private Contact _editingContact;
 
@@ -58,7 +57,7 @@ namespace View.ViewModel
         public ICommand ApplyCommand { get; }
 
         /// <summary>
-        /// Команда применения изменений контакта.
+        /// Команда сохранения контактов в файл.
         /// </summary>
         public ICommand SaveInFileCommand { get; }
 
@@ -195,10 +194,8 @@ namespace View.ViewModel
 
                 _selectedContact = value;
                 OnPropertyChanged(nameof(SelectedContact));
-                OnPropertyChanged(nameof(FullName));
-                OnPropertyChanged(nameof(PhoneNumber));
-                OnPropertyChanged(nameof(Email));
-                OnPropertyChanged(nameof(IsReadOnly));
+                // Оптимизация: Удалены лишние OnPropertyChanged, оставлено только CanEditDelete
+                // так как остальные свойства обновляются через IsEditing
                 OnPropertyChanged(nameof(CanEditDelete));
             }
         }
@@ -213,9 +210,6 @@ namespace View.ViewModel
             {
                 _editingContact = value;
                 OnPropertyChanged(nameof(EditingContact));
-                OnPropertyChanged(nameof(FullName));
-                OnPropertyChanged(nameof(PhoneNumber));
-                OnPropertyChanged(nameof(Email));
             }
         }
 
@@ -227,13 +221,26 @@ namespace View.ViewModel
             get => _isEditing;
             set
             {
+                if (_isEditing == value) return;
                 _isEditing = value;
                 OnPropertyChanged(nameof(IsEditing));
-                OnPropertyChanged(nameof(IsReadOnly));
+                // Заменён вызов RefreshUI() на точечные обновления
+                OnPropertyChanged(nameof(IsReadOnly)); 
                 OnPropertyChanged(nameof(IsApplyVisible));
                 OnPropertyChanged(nameof(CanEditDelete));
             }
         }
+
+        // Оптимизация: Полностью удалён метод RefreshUI(), так как все обновления
+        // теперь происходят напрямую в сеттерах свойств
+        /* БЫЛО:
+        public void RefreshUI()
+        {
+            OnPropertyChanged(nameof(IsReadOnly));
+            OnPropertyChanged(nameof(IsApplyVisible));
+            OnPropertyChanged(nameof(CanEditDelete));
+        }
+        */
 
         /// <summary>
         /// Флаг, указывающий на режим только для чтения.
@@ -260,16 +267,6 @@ namespace View.ViewModel
         }
 
         /// <summary>
-        /// Обновляет состояние пользовательского интерфейса.
-        /// </summary>
-        public void RefreshUI()
-        {
-            OnPropertyChanged(nameof(IsReadOnly));
-            OnPropertyChanged(nameof(IsApplyVisible));
-            OnPropertyChanged(nameof(CanEditDelete));
-        }
-
-        /// <summary>
         /// Событие, возникающее при изменении значения свойства.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
@@ -281,15 +278,23 @@ namespace View.ViewModel
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+        /// <summary>
+        /// Метод для команды добавления контакта.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void AddContact(object parameter)
         {
             IsEditing = true;
             EditingContact = new Contact();
             SelectedContact = null;
-            RefreshUI();
+            // Удалён вызов RefreshUI() - IsEditing=true обновит все свойства
         }
 
-        private void ApplyChanges(object parameter) 
+        /// <summary>
+        /// Метод для команды сохранения изменений.
+        /// </summary>
+        /// <param name="parameter"></param>
+        private void ApplyChanges(object parameter)
         {
             if (EditingContact != null)
             {
@@ -314,13 +319,21 @@ namespace View.ViewModel
             IsEditing = false;
         }
 
+        /// <summary>
+        /// Метод для команды редактирования контакта.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void EditContact(object parameter)
         {
             EditingContact = SelectedContact.Clone();
             IsEditing = true;
-            RefreshUI();
+            // Удалён вызов RefreshUI()
         }
 
+        /// <summary>
+        /// Метод для команды удаления контакта.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void RemoveContact(object parameter)
         {
             int index = Contacts.IndexOf(SelectedContact);
@@ -336,6 +349,10 @@ namespace View.ViewModel
             }
         }
 
+        /// <summary>
+        /// Метод для команды сохранения и загрузки в файл.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void SaveInFile(object parameter)
         {
             _serializer.SaveContacts(Contacts);
