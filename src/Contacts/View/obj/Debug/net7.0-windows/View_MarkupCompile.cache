@@ -5,16 +5,16 @@ winexe
 C#
 .cs
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\
-View
+View_vcwexipm_wpftmp
 none
 false
-TRACE;DEBUG;NET;NET7_0;NETCOREAPP
+TRACE;RELEASE;NET;NET7_0;NETCOREAPP
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\App.xaml
-11407045341
+2-1919080681
 11832206028
-7368156124
-2001153482350
-MainWindow.xaml;
+13504273521
+400-1988002596
+Controls\ContactControl.xaml;MainWindow.xaml;
 
-False
+True
 

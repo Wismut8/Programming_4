@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:e="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:vm="clr-namespace:View.ViewModel"
+        xmlns:controls="clr-namespace:View.Controls"
         mc:Ignorable="d"
         Title="Contacts" Height="432" Width="600">
 
@@ -15,8 +16,32 @@
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+        <DataTemplate x:Key="ContactDataTemplate">
+            <StackPanel Orientation="Horizontal" Margin="3">
+
+                <Image 
+                Source="/contact photo.png" 
+                Width="30" 
+                Height="30"
+                Margin="0,0,5,0"
+                VerticalAlignment="Center"/>
+
+                <StackPanel>
+                    <TextBlock
+                    FontSize="12"
+                    FontWeight="SemiBold"
+                    Text="{Binding FullName}"/>
+                    <TextBlock
+                    FontSize="10"
+                    Text="{Binding PhoneNumber}"/>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+
     </Window.Resources>
-    
+
     <e:Interaction.Triggers>
         <e:EventTrigger EventName="Closing">
             <e:InvokeCommandAction Command="{Binding SaveInFileCommand}"/>
@@ -56,13 +81,8 @@
                     Grid.Row="1"
                     Height="Auto"
                     ItemsSource="{Binding Contacts}"
-                    SelectedItem="{Binding SelectedContact, Mode=TwoWay}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding FullName}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    SelectedItem="{Binding SelectedContact, Mode=TwoWay}"
+                    ItemTemplate="{StaticResource ContactDataTemplate}"/>
             </Grid>
         </Border>
 
@@ -110,29 +130,11 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Image 
-                HorizontalAlignment="Left" 
-                Height="100" 
-                Width="100" 
-                Margin="8,35,8,0" 
-                VerticalAlignment="Top"  
-                Source="/contact photo.png"/>
-
-            <StackPanel Grid.Column="1" Margin="8">
-                <Label Content="Name:"/>
-                <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         IsReadOnly="{Binding IsReadOnly}"
-                         Margin="5,0,0,0"/>
-
-                <Label Content="Phone Number:"/>
-                <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         IsReadOnly="{Binding IsReadOnly}"
-                         Margin="5,0,0,0"/>
-
-                <Label Content="Email:"/>
-                <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         IsReadOnly="{Binding IsReadOnly}"
-                         Margin="5,0,0,0"/>
+            <StackPanel Grid.Column="1">
+                <controls:ContactControl 
+                    CurrentContact="{Binding SelectedContact, Mode=TwoWay}"
+                    Grid.Row="0" 
+                    Width="Auto"/>
             </StackPanel>
 
             <Button Grid.Column="1" 
@@ -143,7 +145,7 @@
                     Width="75" 
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Top"
-                    Margin="8,50,0,0"
+                    Margin="128,50,0,0"
                     Visibility="{Binding IsApplyVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
         </Grid>
     </Grid>

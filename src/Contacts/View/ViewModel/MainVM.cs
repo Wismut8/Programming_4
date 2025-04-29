@@ -194,8 +194,9 @@ namespace View.ViewModel
 
                 _selectedContact = value;
                 OnPropertyChanged(nameof(SelectedContact));
-                // Оптимизация: Удалены лишние OnPropertyChanged, оставлено только CanEditDelete
-                // так как остальные свойства обновляются через IsEditing
+                OnPropertyChanged(nameof(FullName));
+                OnPropertyChanged(nameof(PhoneNumber));
+                OnPropertyChanged(nameof(Email));
                 OnPropertyChanged(nameof(CanEditDelete));
             }
         }
@@ -210,6 +211,9 @@ namespace View.ViewModel
             {
                 _editingContact = value;
                 OnPropertyChanged(nameof(EditingContact));
+                OnPropertyChanged(nameof(FullName));
+                OnPropertyChanged(nameof(PhoneNumber));
+                OnPropertyChanged(nameof(Email));
             }
         }
 
@@ -225,7 +229,7 @@ namespace View.ViewModel
                 _isEditing = value;
                 OnPropertyChanged(nameof(IsEditing));
                 // Заменён вызов RefreshUI() на точечные обновления
-                OnPropertyChanged(nameof(IsReadOnly)); 
+                OnPropertyChanged(nameof(IsReadOnly));
                 OnPropertyChanged(nameof(IsApplyVisible));
                 OnPropertyChanged(nameof(CanEditDelete));
             }
@@ -327,7 +331,7 @@ namespace View.ViewModel
         {
             EditingContact = SelectedContact.Clone();
             IsEditing = true;
-            // Удалён вызов RefreshUI()
+            //  Удалён вызов RefreshUI()
         }
 
         /// <summary>

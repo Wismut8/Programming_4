@@ -10,11 +10,11 @@ none
 false
 TRACE;RELEASE;NET;NET7_0;NETCOREAPP
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\App.xaml
-11407045341
+2-1919080681
 11832206028
-7368156124
+81094438443
 2001153482350
-MainWindow.xaml;
+Controls\ContactControl.xaml;MainWindow.xaml;
 
 True
 
