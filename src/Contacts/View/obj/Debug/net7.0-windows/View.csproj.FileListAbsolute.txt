@@ -51,3 +51,4 @@ C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-wind
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\Controls\ContactControl.g.cs
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\View.sourcelink.json
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\View.csproj.Up2Date
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\bin\Debug\net7.0-windows\CommunityToolkit.Mvvm.dll

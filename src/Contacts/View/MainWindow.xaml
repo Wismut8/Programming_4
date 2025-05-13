@@ -109,15 +109,13 @@
                     Command="{Binding EditCommand}"
                     Height="25" 
                     Margin="3,3,3,8"
-                    Grid.Column="1"
-                    IsEnabled="{Binding CanEditDelete}"/>
+                    Grid.Column="1"/>
 
             <Button Content="Remove" 
                     Command="{Binding RemoveCommand}"
                     Height="25" 
                     Margin="3,3,8,8"
-                    Grid.Column="2"
-                    IsEnabled="{Binding CanEditDelete}"/>
+                    Grid.Column="2"/>
         </Grid>
 
         <Grid Grid.Column="2" Grid.RowSpan="2">
@@ -141,7 +139,7 @@
             <Button Grid.Column="1" 
                     Grid.Row="1"
                     Content="Apply" 
-                    Command="{Binding ApplyCommand}"
+                    Command="{Binding ApplyChangesCommand}"
                     Height="25" 
                     Width="75" 
                     HorizontalAlignment="Left" 
