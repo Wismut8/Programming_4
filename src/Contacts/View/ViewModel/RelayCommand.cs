@@ -8,8 +8,21 @@ namespace View.ViewModel
     /// </summary>
     internal class RelayCommand : ICommand
     {
+        /// <summary>
+        /// Делегат для выполнения действия команды.
+        /// </summary>
         private readonly Action<object> _execute;
+
+        /// <summary>
+        /// Делегат для проверки возможности выполнения команды.
+        /// Если равно null, команда может быть выполнена всегда.
+        /// </summary>
         private readonly Func<object, bool> _canExecute;
+
+        /// <summary>
+        /// Флаг. Если true, CommandManager будет автоматически вызывать CanExecuteChanged
+        /// при изменениях в UI, которые могут повлиять на возможность выполнения команды.
+        /// </summary>
         private readonly bool _useCommandManager;
 
         /// <summary>

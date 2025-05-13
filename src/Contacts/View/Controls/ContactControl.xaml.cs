@@ -1,38 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using View.Model;
 
 namespace View.Controls
 {
     /// <summary>
-    /// Логика взаимодействия для ContactControl.xaml
+    /// Пользовательский элемент управления для отображения и редактирования контакта.
     /// </summary>
     public partial class ContactControl : UserControl
     {
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="ContactControl"/>.
+        /// </summary>
         public ContactControl()
         {
             InitializeComponent();
+            PhoneNumberTextBox.PreviewTextInput += PhoneNumberTextBox_PreviewTextInput;
+            DataObject.AddPastingHandler(PhoneNumberTextBox, PhoneNumberTextBox_Pasting);
         }
-        public static readonly DependencyProperty CurrentContactProperty =
-    DependencyProperty.Register("CurrentContact", typeof(Contact), typeof(ContactControl),
-        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        public Contact CurrentContact
+        /// <summary>
+        /// Обработчик события ввода текста в поле номера телефона.
+        /// Разрешает ввод только цифр и символов +-() и пробелов.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PhoneNumberTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            get => (Contact)GetValue(CurrentContactProperty);
-            set => SetValue(CurrentContactProperty, value);
+            var regex = new Regex(@"^[\d\-\+\(\)\s]+$");
+            e.Handled = !regex.IsMatch(e.Text);
         }
+
+        /// <summary>
+        /// Обработчик события вставки текста в поле номера телефона.
+        /// Проверяет вставляемый текст на соответствие допустимым символам.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PhoneNumberTextBox_Pasting(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(string)))
+            {
+                var text = (string)e.DataObject.GetData(typeof(string));
+                var regex = new Regex(@"^[\d\-\+\(\)\s]+$");
+
+                if (!regex.IsMatch(text))
+                {
+                    e.CancelCommand();
+                }
+            }
+            else
+            {
+                e.CancelCommand();
+            }
+        }
+
+        /// <summary>
+        /// DependencyProperty для свойства IsReadOnly.
+        /// </summary>
+        public static readonly DependencyProperty IsReadOnlyProperty =
+            DependencyProperty.Register("IsReadOnly", typeof(bool), typeof(ContactControl),
+            new PropertyMetadata(true));
+
+        /// <summary>
+        /// Флажок доступа элемента управления только для чтения.
+        /// </summary>
+        public bool IsReadOnly
+        {
+            get => (bool)GetValue(IsReadOnlyProperty);
+            set => SetValue(IsReadOnlyProperty, value);
+        }
+
     }
 }

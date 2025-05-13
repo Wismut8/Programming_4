@@ -40,7 +40,6 @@ C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-wind
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\View.AssemblyInfoInputs.cache
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\View.AssemblyInfo.cs
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\View.csproj.CoreCompileInputs.cache
-C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\View.csproj.CopyComplete
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\View.dll
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\refint\View.dll
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\View.pdb
@@ -50,3 +49,5 @@ C:\Users\Liza\Source\Repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-wind
 C:\Users\Liza\Source\Repos\Programming_4\src\Contacts\View\bin\Debug\net7.0-windows\Microsoft.Xaml.Behaviors.dll
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\Controls\ContactControl.baml
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\Controls\ContactControl.g.cs
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\View.sourcelink.json
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-windows\View.csproj.Up2Date

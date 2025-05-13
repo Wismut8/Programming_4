@@ -132,7 +132,8 @@
 
             <StackPanel Grid.Column="1">
                 <controls:ContactControl 
-                    CurrentContact="{Binding SelectedContact, Mode=TwoWay}"
+                    DataContext="{Binding ActiveContact}" 
+                    IsReadOnly="{Binding DataContext.IsReadOnly, RelativeSource={RelativeSource AncestorType=Window}}"
                     Grid.Row="0" 
                     Width="Auto"/>
             </StackPanel>
@@ -145,7 +146,7 @@
                     Width="75" 
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Top"
-                    Margin="128,50,0,0"
+                    Margin="112,50,0,0"
                     Visibility="{Binding IsApplyVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
         </Grid>
     </Grid>

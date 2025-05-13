@@ -8,13 +8,13 @@ C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\obj\Debug\net7.0-wind
 View
 none
 false
-TRACE;DEBUG;NET;NET7_0;NETCOREAPP
+TRACE;DEBUG;NET;NET7_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\Liza\source\repos\Programming_4\src\Contacts\View\App.xaml
 2-1919080681
 11832206028
 10435739464
-2001153482350
+200-928375286
 Controls\ContactControl.xaml;MainWindow.xaml;
 
-True
+False
 

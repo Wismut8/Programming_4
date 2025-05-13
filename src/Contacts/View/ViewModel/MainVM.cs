@@ -26,10 +26,7 @@ namespace View.ViewModel
         /// </summary>
         private bool _isEditing;
 
-        /// <summary>
-        /// Редактируемый контакт.
-        /// </summary>
-        private Contact _editingContact;
+        private Contact _activeContact;
 
         /// <summary>
         /// Коллекция контактов для отображения.
@@ -89,10 +86,8 @@ namespace View.ViewModel
             ApplyCommand = new RelayCommand(
                 execute: ApplyChanges,
                 canExecute: _ => IsEditing &&
-                    EditingContact != null &&
-                    !string.IsNullOrWhiteSpace(EditingContact.FullName) &&
-                    !string.IsNullOrWhiteSpace(EditingContact.PhoneNumber) &&
-                    !string.IsNullOrWhiteSpace(EditingContact.Email),
+                    ActiveContact != null &&
+                    !ActiveContact.HasErrors,
                 useCommandManager: true
             );
 
@@ -103,77 +98,15 @@ namespace View.ViewModel
         }
 
         /// <summary>
-        /// Задает и возвращает полное имя контакта.
+        /// Активный в данный момент контакт для привязки данных.
         /// </summary>
-        public string FullName
+        public Contact ActiveContact
         {
-            get => IsEditing ? EditingContact?.FullName : SelectedContact?.FullName;
+            get => _activeContact;
             set
             {
-                if (IsEditing)
-                {
-                    if (EditingContact != null && EditingContact.FullName != value)
-                    {
-                        EditingContact.FullName = value;
-                        OnPropertyChanged(nameof(FullName));
-                        CommandManager.InvalidateRequerySuggested();
-                    }
-                }
-                else if (SelectedContact != null && SelectedContact.FullName != value)
-                {
-                    SelectedContact.FullName = value;
-                    OnPropertyChanged(nameof(FullName));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Задает и возвращает номер телефона контакта.
-        /// </summary>
-        public string PhoneNumber
-        {
-            get => IsEditing ? EditingContact?.PhoneNumber : SelectedContact?.PhoneNumber;
-            set
-            {
-                if (IsEditing)
-                {
-                    if (EditingContact != null && EditingContact.PhoneNumber != value)
-                    {
-                        EditingContact.PhoneNumber = value;
-                        OnPropertyChanged(nameof(PhoneNumber));
-                        CommandManager.InvalidateRequerySuggested();
-                    }
-                }
-                else if (SelectedContact != null && SelectedContact.PhoneNumber != value)
-                {
-                    SelectedContact.PhoneNumber = value;
-                    OnPropertyChanged(nameof(PhoneNumber));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Задает и возвращает электронную почту контакта.
-        /// </summary>
-        public string Email
-        {
-            get => IsEditing ? EditingContact?.Email : SelectedContact?.Email;
-            set
-            {
-                if (IsEditing)
-                {
-                    if (EditingContact != null && EditingContact.Email != value)
-                    {
-                        EditingContact.Email = value;
-                        OnPropertyChanged(nameof(Email));
-                        CommandManager.InvalidateRequerySuggested();
-                    }
-                }
-                else if (SelectedContact != null && SelectedContact.Email != value)
-                {
-                    SelectedContact.Email = value;
-                    OnPropertyChanged(nameof(Email));
-                }
+                _activeContact = value;
+                OnPropertyChanged(nameof(ActiveContact));
             }
         }
 
@@ -186,34 +119,22 @@ namespace View.ViewModel
             set
             {
                 if (_selectedContact == value) return;
+                
+                _selectedContact = value;
 
-                if (IsEditing && value != null)
+                if (value != null)
                 {
-                    IsEditing = false;
+                    if (IsEditing)
+                    {
+                        IsEditing = false;
+                    }
+
+                    ActiveContact = SelectedContact.Clone();
                 }
 
-                _selectedContact = value;
                 OnPropertyChanged(nameof(SelectedContact));
-                OnPropertyChanged(nameof(FullName));
-                OnPropertyChanged(nameof(PhoneNumber));
-                OnPropertyChanged(nameof(Email));
+                OnPropertyChanged(nameof(ActiveContact));
                 OnPropertyChanged(nameof(CanEditDelete));
-            }
-        }
-
-        /// <summary>
-        /// Контакт, находящийся в режиме редактирования.
-        /// </summary>
-        public Contact EditingContact
-        {
-            get => _editingContact;
-            set
-            {
-                _editingContact = value;
-                OnPropertyChanged(nameof(EditingContact));
-                OnPropertyChanged(nameof(FullName));
-                OnPropertyChanged(nameof(PhoneNumber));
-                OnPropertyChanged(nameof(Email));
             }
         }
 
@@ -228,23 +149,11 @@ namespace View.ViewModel
                 if (_isEditing == value) return;
                 _isEditing = value;
                 OnPropertyChanged(nameof(IsEditing));
-                // Заменён вызов RefreshUI() на точечные обновления
                 OnPropertyChanged(nameof(IsReadOnly));
                 OnPropertyChanged(nameof(IsApplyVisible));
                 OnPropertyChanged(nameof(CanEditDelete));
             }
         }
-
-        // Оптимизация: Полностью удалён метод RefreshUI(), так как все обновления
-        // теперь происходят напрямую в сеттерах свойств
-        /* БЫЛО:
-        public void RefreshUI()
-        {
-            OnPropertyChanged(nameof(IsReadOnly));
-            OnPropertyChanged(nameof(IsApplyVisible));
-            OnPropertyChanged(nameof(CanEditDelete));
-        }
-        */
 
         /// <summary>
         /// Флаг, указывающий на режим только для чтения.
@@ -279,8 +188,10 @@ namespace View.ViewModel
         /// Вызывает событие PropertyChanged при изменении свойства.
         /// </summary>
         /// <param name="propertyName">Имя изменившегося свойства</param>
-        protected void OnPropertyChanged(string propertyName) =>
+        protected void OnPropertyChanged(string propertyName)
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         /// <summary>
         /// Метод для команды добавления контакта.
@@ -289,9 +200,8 @@ namespace View.ViewModel
         private void AddContact(object parameter)
         {
             IsEditing = true;
-            EditingContact = new Contact();
+            ActiveContact = new Contact();
             SelectedContact = null;
-            // Удалён вызов RefreshUI() - IsEditing=true обновит все свойства
         }
 
         /// <summary>
@@ -300,27 +210,23 @@ namespace View.ViewModel
         /// <param name="parameter"></param>
         private void ApplyChanges(object parameter)
         {
-            if (EditingContact != null)
+            if (SelectedContact != null)
             {
-                if (SelectedContact != null)
-                {
-                    SelectedContact.FullName = EditingContact.FullName;
-                    SelectedContact.PhoneNumber = EditingContact.PhoneNumber;
-                    SelectedContact.Email = EditingContact.Email;
-                }
-                else
-                {
-                    var newContact = new Contact(
-                        EditingContact.FullName,
-                        EditingContact.PhoneNumber,
-                        EditingContact.Email);
-                    Contacts.Add(newContact);
-                    SelectedContact = newContact;
-                }
+                SelectedContact.FullName = ActiveContact.FullName;
+                SelectedContact.PhoneNumber = ActiveContact.PhoneNumber;
+                SelectedContact.Email = ActiveContact.Email;
             }
-
-            EditingContact = null;
+            else
+            {
+                var newContact = new Contact(
+                    ActiveContact.FullName,
+                    ActiveContact.PhoneNumber,
+                    ActiveContact.Email);
+                Contacts.Add(newContact);
+                SelectedContact = newContact;
+            }
             IsEditing = false;
+            OnPropertyChanged(nameof(ActiveContact));
         }
 
         /// <summary>
@@ -329,9 +235,7 @@ namespace View.ViewModel
         /// <param name="parameter"></param>
         private void EditContact(object parameter)
         {
-            EditingContact = SelectedContact.Clone();
             IsEditing = true;
-            //  Удалён вызов RefreshUI()
         }
 
         /// <summary>
