@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using View.ViewModel;
+using ViewModel;
 
 namespace View
 {
@@ -8,6 +8,9 @@ namespace View
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Конструктор MainWindow.xaml
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();

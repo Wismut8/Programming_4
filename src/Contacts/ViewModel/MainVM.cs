@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using View.Model;
-using View.Model.Services;
+using Model;
+using Model.Services;
 
 
-namespace View.ViewModel
+namespace ViewModel
 {
     /// <summary>
     /// Основная ViewModel приложения, реализующая логику работы с контактами.
@@ -17,20 +17,17 @@ namespace View.ViewModel
         /// </summary>
         private readonly ContactSerializer _serializer;
 
-        /// <summary>
-        /// Выбранный контакт.
-        /// </summary>
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(EditCommand))]
         [NotifyCanExecuteChangedFor(nameof(RemoveCommand))]
         private Contact _selectedContact;
 
-        /// <summary>
-        /// Хранит состояние редактирования.
-        /// </summary>
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsReadOnly))]
         [NotifyPropertyChangedFor(nameof(IsApplyVisible))]
+        [NotifyCanExecuteChangedFor(nameof(EditCommand))]
+        [NotifyCanExecuteChangedFor(nameof(RemoveCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ApplyChangesCommand))]
         private bool _isEditing;
 
         [ObservableProperty]
@@ -48,16 +45,9 @@ namespace View.ViewModel
         public MainVM()
         {
             _serializer = new ContactSerializer();
-            LoadContacts();
-            if (_activeContact != null)
-            {
-                _activeContact.PropertyChanged += (s, e) => ApplyChangesCommand.NotifyCanExecuteChanged();
-            }
+            LoadContacts();          
         }
 
-        /// <summary>
-        /// Выбранный в данный момент контакт.
-        /// </summary>
         partial void OnSelectedContactChanged(Contact value)
         {
             if (value != null)
@@ -68,6 +58,10 @@ namespace View.ViewModel
                 }
 
                 ActiveContact = SelectedContact.Clone();
+                if (ActiveContact != null)
+                {
+                    ActiveContact.PropertyChanged += (s, e) => ApplyChangesCommand.NotifyCanExecuteChanged();
+                }
             }
         }
 
@@ -112,10 +106,6 @@ namespace View.ViewModel
             SelectedContact = null;
         }
 
-        /// <summary>
-        /// Метод для команды сохранения изменений.
-        /// </summary>
-        /// <param name="parameter"></param>
         [RelayCommand(CanExecute = nameof(CanApply))]
         private void ApplyChanges()
         {
@@ -135,23 +125,15 @@ namespace View.ViewModel
                 SelectedContact = newContact;
             }
             IsEditing = false;
-            OnPropertyChanged(nameof(ActiveContact));
         }
 
-        /// <summary>
-        /// Метод для команды редактирования контакта.
-        /// </summary>
-        /// <param name="parameter"></param>
         [RelayCommand(CanExecute = nameof(CanEditDelete))]
         private void Edit()
         {
             IsEditing = true;
         }
 
-        /// <summary>
-        /// Метод для команды удаления контакта.
-        /// </summary>
-        [RelayCommand(CanExecute =nameof(CanEditDelete))]
+        [RelayCommand(CanExecute = nameof(CanEditDelete))]
         private void Remove()
         {
             int index = Contacts.IndexOf(SelectedContact);

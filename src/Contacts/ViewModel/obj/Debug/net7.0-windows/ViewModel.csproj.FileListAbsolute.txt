@@ -1,0 +1,16 @@
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\obj\Debug\net7.0-windows\ViewModel.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\obj\Debug\net7.0-windows\ViewModel.AssemblyInfoInputs.cache
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\obj\Debug\net7.0-windows\ViewModel.AssemblyInfo.cs
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\obj\Debug\net7.0-windows\ViewModel.csproj.CoreCompileInputs.cache
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\obj\Debug\net7.0-windows\ViewModel.sourcelink.json
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\bin\Debug\net7.0-windows\ViewModel.deps.json
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\bin\Debug\net7.0-windows\ViewModel.dll
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\bin\Debug\net7.0-windows\ViewModel.pdb
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\bin\Debug\net7.0-windows\Model.dll
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\bin\Debug\net7.0-windows\Model.pdb
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\obj\Debug\net7.0-windows\ViewModel.csproj.AssemblyReference.cache
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\obj\Debug\net7.0-windows\ViewModel.csproj.Up2Date
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\obj\Debug\net7.0-windows\ViewModel.dll
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\obj\Debug\net7.0-windows\refint\ViewModel.dll
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\obj\Debug\net7.0-windows\ViewModel.pdb
+C:\Users\Liza\source\repos\Programming_4\src\Contacts\ViewModel\obj\Debug\net7.0-windows\ref\ViewModel.dll

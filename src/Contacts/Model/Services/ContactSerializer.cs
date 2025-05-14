@@ -3,7 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 
-namespace View.Model.Services
+namespace Model.Services
 {
     /// <summary>
     /// Сохраняет и загружает данные контактов

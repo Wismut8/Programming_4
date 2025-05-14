@@ -11,6 +11,12 @@ namespace View.Controls
     public partial class ContactControl : UserControl
     {
         /// <summary>
+        /// Выражение для валидации номера телефона.
+        /// Разрешает только цифры, символы +-() и пробелы.
+        /// </summary>
+        private static readonly Regex PhoneNumberRegex = new Regex(@"^[\d\-\+\(\)\s]+$");
+
+        /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="ContactControl"/>.
         /// </summary>
         public ContactControl()
@@ -24,28 +30,25 @@ namespace View.Controls
         /// Обработчик события ввода текста в поле номера телефона.
         /// Разрешает ввод только цифр и символов +-() и пробелов.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Источник события</param>
+        /// <param name="e">Аргументы события</param>
         private void PhoneNumberTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var regex = new Regex(@"^[\d\-\+\(\)\s]+$");
-            e.Handled = !regex.IsMatch(e.Text);
+            e.Handled = !PhoneNumberRegex.IsMatch(e.Text);
         }
 
         /// <summary>
         /// Обработчик события вставки текста в поле номера телефона.
         /// Проверяет вставляемый текст на соответствие допустимым символам.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Источник события</param>
+        /// <param name="e">Аргументы события</param>
         private void PhoneNumberTextBox_Pasting(object sender, DataObjectPastingEventArgs e)
         {
             if (e.DataObject.GetDataPresent(typeof(string)))
             {
                 var text = (string)e.DataObject.GetData(typeof(string));
-                var regex = new Regex(@"^[\d\-\+\(\)\s]+$");
-
-                if (!regex.IsMatch(text))
+                if (!PhoneNumberRegex.IsMatch(text))
                 {
                     e.CancelCommand();
                 }
